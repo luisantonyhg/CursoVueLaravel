@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiples Instancia</title>
+</head>
+<body>
+    <!-- ----------------------------------------------------------------------
+                     USANDO DOS METODOS DE INSTANCIAS
+     -------------------------------------------------------------------------- -->
+    <section id="plantilla">
+        <p>texto</p>
+
+    </section>
+
+    <div>
+        <main id="VueMain">
+            <h1>ESTA ES OTRA INSTANCIA DE VUE</h1>
+            <p>Aqui es la primera {{ instancia }} 01</p>
+            <p>{{ valor }}</p>
+            <button @click="sumar">Sumar</button>
+            <button @click="destruir">Destruir</button>
+    <!-- ----------------------------------------------------------------------
+        HACIENDO USO DEL REF EN VUE ES IGUAL(DOCUMENTGETID O QUERY SELECTOR)
+     -------------------------------------------------------------------------- -->
+        <h1 ref="MyH1" id="myH1">HACIENDO USO DEL HREF</h1>
+
+        </main>
+
+        <aside id="VueAside">
+            <h1 ref="MyH1" id="myH1">HACIENDO USO DEL HREF</h1>
+            <h1>ESTA ES OTRA INSTANCIA DE VUE</h1>
+            <p>Aqui es la segunda {{ instancia }} 02</p>
+            <p>{{ valor }}</p>
+            <button @click="sumar">Sumar</button>
+            <button @click="montar">Montar instancia</button>
+            <test></test>
+            <test></test>
+        </aside>
+    </div>
+
+   
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <script>
+        // -------------------------------------------------------------
+        //                COMPONENTES EN VUE
+        // -------------------------------------------------------------
+
+            Vue.component('test',{
+                template: "<p @click='count++'> Hola soy un componente y me han hecho click {{ count }} veces </p>",
+                data(){
+                    return{
+                        count: 0
+                    }
+                }
+            })
+
+        
+        // -------------------------------------------------------------
+        //      TEMPLATE  PLANTILLAS
+        // -------------------------------------------------------------
+        const plantilla = new Vue({
+            template:"<div><h1>{{ title }}</h1></div>",
+            data:{
+                title:"My web"
+            }
+        })
+
+        plantilla.$mount("#plantilla")
+        console.log(plantilla)
+        // document.querySelector("#plantilla").appendChild(plantilla.$el)
+        // -------------------------------------------------------------
+        //  ASI PODEMOS ENTRAR A OTRO INSTANCIA DE VUE
+        // -------------------------------------------------------------
+
+        const VueMain = new Vue({
+            // el: "#VueMain",
+            data: {
+                instancia: 'instancia',
+                valor: 5,
+
+            },
+            methods: {
+                sumar: function(){
+                    this.valor += 5
+                     // -------------------------------------------------------------
+                        //  SE TIENE QUE PONER ESTO SI NO OCURRE UN ERROR Y NO SE EJECUTA LA 
+                        // INSTANCIA DE VUEASIDE
+                        // -------------------------------------------------------------
+                    setTimeout(() =>{
+                        VueAside.instancia= 'Cambio el nombre'
+                    },2000)
+
+
+
+                    
+                },
+
+                destruir(){
+                    this.$destroy()
+                }
+
+            },
+            // ----------------------------------------------------------------------------
+            //                       CICLO DE VIDA DE VUE
+            // ---------------------------------------------------------------------------
+            
+            beforeCreate(){
+                // alert('Antes de crearse ' + this.valor)
+                console.log('Antes de crearse')
+            },
+            created(){
+                // alert('creada ' + this.valor)
+                console.log('creada')
+            },
+            beforeMount(){
+                // alert('Antes de Montarse ' + this.valor)
+                console.log('Antes de Montarse')
+            },
+            mounted(){
+                // alert('Montada ' + this.valor)
+                console.log('Montada')
+            },
+            beforeUpdate(){
+                // alert('Antes de actualizarse' + this.valor)
+                console.log('Antes de actualizarse')
+            },
+            update(){
+            // alert('Actualizada ' + this.valor )
+            console.log('Actualizada')
+            },
+            beforeDestroy(){
+                // alert('Antes de destruirse ' + this.valor)
+                console.log('Antes de destruisre')
+                this.$refs.MyH1.style.color = "green"
+            },
+            destroy(){
+                    // alert('Destruido ' + this.valor)
+                    console.log('Destruido')
+                    document.querySelector("#myH1").style.color = "red"
+                }
+            
+        })
+        // -------------------------------------------------------------
+        //  COMO MONTAR UNA INSTANCIA EN VUE  (MOUNT)
+        // -------------------------------------------------------------
+        // VueMain.$mount('#VueMain')
+
+        // VueMain.instancia="SE CAMBIO EL NOMBRE"
+        // VueMain.sumar()
+        // VueMain.$refs.MyH1.style.color = "red"
+        // console.log(VueMain.$refs)
+
+
+        
+        // -------------------------------------------------------------
+        //  ASI PODEMOS ENTRAR A OTRO INSTANCIA DE VUE
+         // -------------------------------------------------------------
+
+        const VueAside = new Vue({
+            el: "#VueAside",
+            data: {
+                instancia: 'instancia',
+                valor:5,
+            },
+            methods:{
+                sumar(){
+                    this.valor += 2
+                    // -------------------------------------------------------------
+                    //  ASI PODEMOS ENTRAR A OTRO INSTANCIA DE VUE
+                    // -------------------------------------------------------------
+                    VueMain.valor += 2
+                },
+                montar(){
+                    VueMain.$mount('#VueMain')
+                }
+            }
+        })
+
+    </script>
+    
+</body>
+</html>

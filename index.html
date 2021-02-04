@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    .myDiv{
+        width: 180px;
+        height: 30px;
+        padding: 10px;
+        text-align: center;
+        line-height: 30px;
+    }
+
+    .active{
+        border: solid 5px #00ff00;
+    }
+
+    .noactive{
+        border: solid 4px #ff0000;
+    }
+
+
+</style>
+<body>
+    <div id="app">
+      
+        <input type="text" v-model="mensaje">
+         {{  mensaje}}
+         <hr>
+        <!-- USANDO V-MODEL ESPECIALMENTE CON EL DATA -->
+         <p> Aqui se esta modificando con v-model nombre : <input type="text" v-model="nombre"></p>
+        <p> Aqui se esta modificando con v model Apellido : <input type="text" v-model="Apellido"></p>
+         <hr>
+
+         <hr>
+         {{ titulo }}
+         <hr>
+         {{ descripcion }}
+         <hr>
+         {{ boleanitos }}
+         <hr>
+         {{ arreglo }}
+         <hr>
+         Marcas : {{ objetitos.marca }} {{ objetitos.año }}
+         <hr>
+         {{ numerico }}
+         <!-- LLAMANDO UNA FUNCION DE VUE EN EL HTML -->
+         <hr>
+         <p> La suma del {{ numerico }} + 5000 es  = {{ sumar() }} </p>
+         <hr>
+         <p>La resta del {{ numerico }} - 2000 es = {{ restar() }} </p>
+         <hr>
+         <!-- USANDO AQUI COMPUTED  DE VUE-->
+         <p>Nombre completo : {{  nombreCompleto }}</p>
+         <p>Nombre formateado : {{ nombreFormateado }}</p>
+
+
+         <!-- LA DIFERENCIA DE UN METHOD Y COMPUTED  -->
+         <p v-once> Nombre formateado con Method = {{ nombreFormateadoMethod() }}</p>
+
+         <!-- CONTROL DE EVENTO EN VUEJS (LA DIRECTIVAS) -->
+         <hr>
+         <button v-on:click="contador += 1" >Darle Click</button>
+
+         <p>Va aumentando {{ contador  }} a darle click</p>
+        <!-- EJEMPLO DE EVENTO PERO CON MOUSEOVER -->
+        <button v-on:mouseover="contador +=1" >Pasar el mouse</button>
+        <p>Va aumentando {{ contador  }} a pasarle el mouse</p>
+        <!-- PRACTICANDO LOS EVENTOS -->
+        
+        <button v-on:click="saludar('pepito')">Saludar a darle click</button>
+        <hr>
+        <button v-on:click="resetear()">Resetear</button>
+        
+        <!-- MODIFICADOR DE EVENTOS -->
+        <div @click.stop="modificadorDeEventos('pedrito', $event)">
+            Mi DIV <p @click.stop="modificadorDeEventos('luis', $event)"> mi parrafo <span @click="modificadorDeEventos('medina' , $event)"> mi spam</span> </p>
+
+        </div>
+
+            <!-- EJERCICIOS RESUELTO CON TODO LO APRENDIDO EN VUE -->
+
+        
+            <p>{{ mensajeEjercicios }}- <button @click="cambio()">{{ despedida }}</button></p>
+            <p>Has hecho un {{ contador }} click</p>
+            <hr>
+            <p><input type="text" v-model="almacendenombre"><button @click="guardar()">guardar</button></p>
+            <p>{{ nombrearray }}</p>
+    
+            <!-- EJERCICIO CON V-BIND -->
+
+            <a v-bind:href="url">{{ url }}</a>
+            <div class="myDiv" v-bind:class="claseDinamica" @click="cambioBind">
+                Esta Activo? : {{ active }}
+            </div>
+
+            <p>active : {{ active }}</p>
+            <p>active : {{ claseDinamica }}</p>
+
+            <!-- EJERCICIOS DE v-html -->
+
+            <p v-html="link">{{ link }}</p>
+            <p v-html="msg">{{ msg }}</p>
+
+             <!-- EJERCICIOS DE v-texto -->
+             <p v-text="link"></p>
+             <p> contendio {{ link }} contenido</p>
+
+             <!-- EJERCICIOS DE V-ONCE -->
+             <input type="text" v-model="vionce">
+             <!-- ESTE EJEMPLO DE AQUI NO SE LE TOCA -->
+             <p v-once>{{ vionce }}</p>
+             <!-- A ESTE EJEMPLO DE AQUI SI SE LE TOCA -->
+             <p >{{ vionce }}</p>
+
+
+             <!-- -----------------------------------------------------------
+                                 PROPIEDAD WATCH VUE
+               -------------------------------------------------------------->
+
+              <hr>
+              <input type="texto" v-model="pais">
+              <p>{{ pais  }}</p>
+              <hr>
+              <button @click="mensajeWatch">Hacer Click</button>
+              <br>
+              <br>
+              <br>
+
+
+              <input type="texto" v-model="preguntaWatch">
+              {{ respuestaWatch }}
+
+
+                <!-- -----------------------------------------------------------
+                                 V-IF Y V-ELSE
+               -------------------------------------------------------------->
+
+               <hr>
+               <!-- -----------------------------------------------------------
+                                 DIFERENCIA DE V-SHOW Y V-IF
+               -------------------------------------------------------------->
+               <h1>DIFERENCIA DE V-SHOW Y V-IF</h1>
+               <h1></h1>
+               
+                   <div v-show="boleanitos">
+                       <p>V-SHOW</p>
+                       <input type="text">
+                   </div>
+               
+               
+                   <div v-if="boleanitos">
+                       <p>V-IF</p>
+                       <input type="text">
+                   </div>
+               
+               <p v-if="boleanitos">Estoy activo</p>
+               <p v-else>Estoy inactivo</p>
+               <button @click="boleanitos = !boleanitos ">probando</button>
+               <hr>
+               <template v-if="contador > 0">
+                <p> Hay en inventario {{ contador }}</p>
+               <button  @click="contador--">Comprar</button>
+
+               </template>
+
+               <p v-else>No hay Productos</p>
+
+               <hr>
+                <!-- -----------------------------------------------------------
+                                 EJEMPLOS CON  V-IF V-ELSE V-ELSE-IF
+               -------------------------------------------------------------->
+
+               <h1>EJEMPLOS CON  V-IF V-ELSE V-ELSE-IF</h1>
+
+               <template v-if="manzana > 0">
+                <p >tenemos {{ manzana }} manzana<span v-if="manzana > 1">s</span></p>
+                <button @click="manzana--">Descontar</button>
+               </template>
+              
+               <template v-else-if ="peras > 0">
+                   <p>tenemos {{ peras }} pera<span v-if="peras >1">s</span></p>
+                   <button @click="peras--">Descontar</button>
+               </template>
+               <p v-else>No hay Productos final</p>
+
+               <hr>
+
+
+                <!-- -----------------------------------------------------------
+                                 USANDO CON V-FOR
+               -------------------------------------------------------------->
+                    <h1>APRENDIENDO V-FOR</h1>
+
+               <span v-for="n in 10">{{ n }}</span>
+               <ul>
+                   <li v-for="pais in paises">{{ pais }}</li>
+               </ul>
+                
+               <ul>
+                   <li v-for="(valor, llave) in carro">
+                       {{ llave }} - {{ valor }}
+                   </li>
+               </ul>
+
+               <div v-for="(producto, index) in productos" :key="index" v-bind:style="[producto.cant < 1 ? {'opacity': '.5'}: '']">
+                   <h3 style="color:red" v-if="producto.cant < 1">Se agoto {{ producto.name }}</h3>
+                   <p>Nombre: {{ producto.name }}</p>
+                   <input type="text" v-model="producto.name">
+                   <p>Precio: {{ producto.precio }}</p>
+                   <input type="text" v-model.text="producto.precio">
+                   <p>Cantidad: {{ producto.cant }}</p>
+                   <input type="texto" v-model.number="producto.cant">
+                        {{ producto.name }} - {{ index }}
+               </div>
+
+               <p>total de inventario {{ total }}</p>
+               <input type="text" v-model="agregarNombres">
+               <button @click="agregarItem">Agregar Item</button>
+
+                 <!-- -----------------------------------------------------------
+                                USANDO MULTIPLES INSTANCIAS
+               -------------------------------------------------------------->
+                <br><hr>
+               <h1>USANDO MULTIPLES INSTANCIAS</h1>
+
+                <section>
+                    <main>
+                        <p>{{ instancia }} 01</p>
+                        <p>Valor : {{ contador }}</p>
+                        <button @click="sumarInstancia">Sumar Instancia</button>
+                    </main>
+
+                    <aside>
+                        <p>{{ instancia }} 02</p>
+
+                    </aside>
+
+                </section>
+
+
+
+
+               
+
+
+               
+
+            
+    </div>
+
+
+    <!-- CON ESTE CDN PODEMOS USAR VUE JS CON TAL SOLO INSTANCIALRLO -->
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <!-- AQUI SE CREAR UN SCRIP SEGUN AL APP QUE CREAMOS NOSOTROS. -->
+    <script>
+        const app = new Vue({
+            el: "#app",
+
+            // ------------------------------------------------------------------------------------
+            //     VALORES O VARIABLE SE PODRIA DECIR EN DATA VUE
+            // ------------------------------------------------------------------------------------
+
+            data: {
+                instancia:'Instancia',
+                paises: ['argentina', 'bolivia', 'chile'],
+                carro: {
+
+                    marca: 'toyota',
+                    modelo: 2020,
+                    nombre: 'Yaris',
+                    color: 'Azul',
+                    precio: '150000'
+
+                },
+                productos: [
+                    {name: 'zapato', precio: 100, cant:5},
+                    {name: 'Jean', precio:30, cant:0},
+                    {name: 'polo', precio:54, cant:4},
+
+                ],
+                agregarNombres:'',
+                manzana: 5,
+                peras: 4,
+                mensaje: "Bienvenido a Vue",
+                titulo: "Aprediendo lo mejor",
+                descripcion: "Sigo queriendo estar contigo",
+                boleanitos: false,
+                arreglo: ['vue', 'react', 'node', 'laravel'],
+                objetitos: {'marca':'mazda', 'año':'2019'},
+                numerico: 3000,
+                nombre: 'AntONY',
+                Apellido: 'Huamani Gonzales',
+                contador: 5,
+                controldeejercicios:false,
+                almacendenombre: '',
+                nombrearray: [],
+                url: "https:/www.udemy.com",
+                active: false,
+                link: "<a href='http://www.udemy.com'>Udemy</a>",
+                msg: "<strong>Hola!</strong>",
+                vionce: 'Carolina',
+                pais: "Ecuador",
+                preguntaWatch: " ",
+                respuestaWatch: " ",
+                testWatch: "Valor Viejo",
+            },
+            methods: {
+                sumar: function(){
+                    return this.numerico + 5000
+                },
+                restar: function(){
+                    return this.numerico - 2000
+                },
+
+                nombreFormateadoMethod: function(){
+                    return this.nombre.charAt(0).toUpperCase() + this.nombre.slice(1).toLowerCase() + " " + Date.now()
+                },
+                saludar: function(a){
+                    console.log( "Bienvenido"+ " " + a + " " + this.titulo)
+                    this.titulo = 0
+                },
+                // DOS FORMAS DE USAR UNA FUNCION EN UN METHOD
+                resetear (){
+                    console.log(this.titulo = '')
+                },
+                modificadorDeEventos(nombrePersona, event){
+                        console.log('Hola', nombrePersona)
+                        console.log(event.target.tagName)
+                        this.contador = 0
+                },
+                cambio(){
+                    this.contador++
+                    this.controldeejercicios = !this.controldeejercicios
+                },
+                guardar(){
+                    if(this.almacendenombre !=''){
+                        this.nombrearray.push(this.almacendenombre.toUpperCase())
+                        this.almacendenombre = ""
+                    }
+                },
+                cambioBind(){
+                    this.active = !this.active
+                },
+                mensajeWatch(){
+                    console.log('Metodo de Mensaje');
+                    this.testWatch = "Valor Nuevo"
+                },
+                agregarItem(){
+                    if(this.agregarNombres != '' && this.agregarNombres.length >3){
+                        this.productos.push({name:this.agregarNombres, precio:5,cant:5})
+                    }else{
+                        alert('debes agregar algo')
+                    }
+                },
+                sumarInstancia(){
+                    this.contador += 5
+                }
+            },
+
+            // ----------------------------------------------------------------------------------------------
+            //          PROPIEDAD COMPUTADAS
+            // -----------------------------------------------------------------------------------------------
+            computed: {
+
+                nombreCompleto: function(){
+                    return this.nombre + "  " + this.Apellido;
+                },
+                nombreFormateado: function(){
+                    return this.nombre.charAt(0).toUpperCase() + this.nombre.slice(1).toLowerCase() + " " + Date.now()
+                },
+
+                mensajeEjercicios() {
+                    return this.controldeejercicios?'Hola':'chao'
+                },
+                despedida(){
+                    return this.controldeejercicios?'Despedirse':'saludar'
+                },
+                claseDinamica(){
+                    return this.active?"active":"noactive";
+                },
+                total(){
+                    return this.productos.reduce((suma,producto)=>{
+                    return suma + producto.cant
+                    }, 0)
+                }
+
+            },
+            // ----------------------------------------------------------------------------------------------
+            //          OBSERVADOR EN VUE 
+            // -----------------------------------------------------------------------------------------------
+            watch: {
+                pais: "mensajeWatch",
+                testWatch: function(newVal, oldVal){
+                    console.log(newVal, ' ' , oldVal)
+
+                },
+                preguntaWatch: function(){
+                    if(this.preguntaWatch.indexOf("?") === -1){
+                        this.respuestaWatch = "Me has preguntado algo? recuerda el signo -> ? "
+                        return
+                    }
+                    
+                    this.respuestaWatch = "Pensando";
+                    setTimeout(() =>{
+                        if(Math.round(Math.random()) === 1){
+                            this.respuestaWatch = "si"
+                        }else{
+                            this.respuestaWatch = "No"
+                        }
+                    }, 2000)
+                }
+            }
+
+        })
+
+    </script>
+</body>
+</html>
